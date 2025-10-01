@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>HANNUN - Korean Product Guide</title>
+    <link rel="stylesheet" as="style" crossorigin
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        :root { --primary-black: #111111; --primary-white: #ffffff; --accent-gray: #777777; --light-gray: #f2f2f2; --border-color: #dddddd; --hover-color: #e8e8e8; --focus-ring: rgba(17, 17, 17, 0.15); }
+        body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--primary-white); color: var(--primary-black); line-height: 1.5; overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        .splash-screen { position: fixed; inset: 0; background: var(--primary-black); z-index: 10000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.5s ease-out; gap: 1.5rem; color: var(--primary-white); }
+        .splash-screen.fade-out { opacity: 0; pointer-events: none; }
+        .splash-title { font-size: 3.5rem; font-weight: 800; letter-spacing: -0.05em; opacity: 0; animation: splashFadeIn 0.8s ease-out 0.3s forwards; }
+        @keyframes splashFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .home-screen { min-height: 100vh; padding: 2.5rem 1.5rem; display: flex; flex-direction: column; align-items: center; }
+        .header { width: 100%; max-width: 500px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .logo-image { height: 32px; vertical-align: middle; }
+        .lang-btn { padding: 0.6rem 1rem; background: var(--light-gray); border: 1px solid var(--border-color); border-radius: 0; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: none; display: flex; align-items: center; gap: 0.4rem; }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding-top: 1rem;
+            align-items: center;
+            text-align: center;
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .welcome-text h1 { font-size: clamp(2.2rem, 8vw, 3.2rem); font-weight: 800; line-height: 1.2; letter-spacing: -0.04em; margin-bottom: 0.8rem; }
+        .welcome-text p { font-size: 1.15rem; color: var(--accent-gray); font-weight: 500; }
+        .search-options { width: 100%; display: flex; flex-direction: column; gap: 1rem; }
+        .search-option { background: var(--primary-white); border: 2px solid var(--primary-black); border-radius: 0; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: all 0.2s ease-out; box-shadow: 4px 4px 0px var(--primary-black); }
+        .search-option:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0px var(--primary-black); background-color: var(--light-gray); }
+        .option-icon { width: 3.5rem; height: 3.5rem; color: var(--primary-black); background: var(--light-gray); border-radius: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid var(--border-color); padding: 0.5rem; }
+        .option-icon svg { width: 100%; height: 100%; object-fit: contain; }
+        .option-info { flex: 1; text-align: left; }
+        .option-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: -0.01em; }
+        .option-desc { font-size: 0.9rem; color: var(--accent-gray); line-height: 1.4; font-weight: 400; }
+        .page-slide-right { position: fixed; inset: 0; background: var(--primary-white); z-index: 1000; transition: transform 0.3s cubic-bezier(0.7, 0, 0.3, 1); box-shadow: none; overflow-y: auto; transform: translateX(100%); }
+        .page-slide-right.active { transform: translateX(0); }
+        .page-header { background: var(--primary-white); padding: 1rem 1.5rem; display: flex; align-items: center; gap: 0.8rem; border-bottom: 2px solid var(--primary-black); z-index: 100; position: sticky; top: 0; }
+        .back-btn { width: 44px; height: 44px; border-radius: 0; background: var(--primary-black); color: var(--primary-white); border: none; font-size: 1.5rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease-out; box-shadow: none; }
+        .header-logo { flex: 1; text-align: center; margin-right: 44px; cursor: pointer; transition: opacity 0.2s; }
+        .header-logo:hover { opacity: 0.7; }
+        
+        .search-bar-container { flex: 1; display: flex; gap: 0.5rem; }
+        .search-input { flex: 1; padding: 0.8rem 1.2rem; border: 2px solid var(--primary-black); border-radius: 0; background: var(--light-gray); font-size: 1rem; outline: none; transition: all 0.2s ease-out; box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.1); }
+        .search-submit-btn { width: 44px; height: 44px; border: 2px solid var(--primary-black); background: var(--primary-black); color: var(--primary-white); cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+
+        .results-container { padding: 0.5rem 1.5rem; }
+        .result-card { background: transparent; border-bottom: 1px solid var(--border-color); padding: 1rem 0.5rem; cursor: pointer; transition: background-color 0.15s ease-out; }
+        .result-card:hover { background-color: var(--light-gray); }
+        .result-name { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.2rem; }
+        .result-desc { font-size: 0.85rem; color: var(--accent-gray); font-weight: 400; }
+        .detail-hero { padding: 2rem 1.5rem; background: var(--primary-white); border-bottom: 2px solid var(--primary-black); }
+        .detail-title { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+        .detail-subtitle { font-size: 1rem; color: var(--accent-gray); margin-bottom: 1.5rem; font-weight: 500; }
+        .info-grid { display: flex; flex-direction: column; gap: 0; margin: 1.5rem 0; border-top: 1px solid var(--border-color); }
+        .info-item { background: transparent; padding: 0.9rem 0.25rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .info-label { font-size: 0.9rem; color: var(--accent-gray); font-weight: 500; flex-shrink: 0; padding-right: 1rem; }
+        .info-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-align: right;
+            color: var(--primary-black);
+            word-break: break-all;
+            width: 40%;
+        }
+        .scanner-modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); z-index: 3000; display: none; align-items: center; justify-content: center; padding: 1rem; }
+        .scanner-modal.active { display: flex; }
+        .barcode-modal-content { background: var(--primary-white); border-radius: 0; width: 100%; max-width: 500px; margin: 0 auto; overflow: hidden; display: flex; flex-direction: column; border: 2px solid var(--primary-black); box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.2); }
+        .barcode-header { background: var(--primary-black); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; color: var(--primary-white); }
+        .close-scan-btn { width: 36px; height: 36px; border-radius: 0; background: rgba(255, 255, 255, 0.2); border: none; color: var(--primary-white); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .scan-title { font-size: 1.1rem; font-weight: 700; flex: 1; text-align: center; margin-right: 2.25rem; }
+        .scanner-container { position: relative; background: #000; height: 300px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        #scanner-viewport { width: 100%; height: 100%; position: relative; }
+        #scanner-viewport video, #scanner-viewport canvas { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
+        .scan-overlay { position: absolute; inset: 0; pointer-events: none; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .scan-guide { width: 250px; height: 100px; position: relative; }
+        .scan-corners { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+        .corner { position: absolute; width: 20px; height: 20px; border: 3px solid #00ff00; }
+        .corner.top-left { top: 0; left: 0; border-right: none; border-bottom: none; }
+        .corner.top-right { top: 0; right: 0; border-left: none; border-bottom: none; }
+        .corner.bottom-left { bottom: 0; left: 0; border-right: none; border-top: none; }
+        .corner.bottom-right { bottom: 0; right: 0; border-left: none; border-top: none; }
+        .scan-line { position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #00ff00, transparent); animation: scan 2s linear infinite; }
+        @keyframes scan { 0% { transform: translateY(-50px); } 100% { transform: translateY(50px); } }
+        .scan-instruction { position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; color: white; font-size: 14px; font-weight: 500; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .scan-result { background: var(--light-gray); padding: 30px; text-align: center; display: none; }
+        .scan-result.active { display: block; }
+        .result-icon { font-size: 48px; margin-bottom: 16px; }
+        .barcode-number { font-size: 18px; font-weight: 700; color: #2D3436; margin-bottom: 8px; font-family: monospace; }
+        .product-found { font-size: 16px; color: #5B5FDE; font-weight: 600; margin-bottom: 20px; }
+        .scan-again-btn { padding: 10px 24px; background: var(--primary-black); color: white; border: none; border-radius: 0; font-size: 14px; font-weight: 600; cursor: pointer; }
+        .manual-input { padding: 1.5rem; background: var(--light-gray); border-top: 1px solid var(--border-color); }
+        .manual-text { font-size: 12px; color: var(--accent-gray); text-align: center; margin-bottom: 12px; }
+        .barcode-input { width: 100%; padding: 0.8rem 1rem; border: 2px solid var(--primary-black); border-radius: 0; font-size: 1rem; text-align: center; margin-bottom: 0.8rem; outline: none; background-color: var(--primary-white); transition: all 0.2s ease-out; box-shadow: inset 2px 2px 0px rgba(0, 0, 0, 0.1); font-family: monospace; }
+        .barcode-input:focus { border-color: #5B5FDE; }
+        .search-barcode-btn { width: 100%; padding: 0.9rem; background: var(--primary-black); color: var(--primary-white); border: 2px solid var(--primary-black); border-radius: 0; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease-out; box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.2); }
+        .loading { text-align: center; padding: 3rem; color: var(--accent-gray); font-weight: 500; font-size: 1rem; }
+        .spinner { width: 36px; height: 36px; border: 3px solid var(--border-color); border-top-color: var(--primary-black); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .toast { position: fixed; bottom: 2.5rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--primary-black); color: var(--primary-white); padding: 0.8rem 1.2rem; border-radius: 0; font-size: 0.9rem; z-index: 5000; opacity: 0; transition: all 0.3s ease-out; box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2); }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .no-results { text-align: center; padding: 4rem 1.5rem; color: var(--accent-gray); font-weight: 500; font-size: 1rem; }
+        @media (max-width: 600px) { input[type="text"], input[type="number"] { font-size: 16px; } }
+    </style>
+</head>
+
+<body>
+    <div class="splash-screen" id="splash"> <div class="splash-title">HANNUN</div> </div>
+    <main class="home-screen" id="home"> 
+        <header class="header"> 
+            <div class="logo"> 
+                <img src="logo.jpeg" alt="HANNUN Logo" class="logo-image">
+            </div> 
+            <button class="lang-btn" onclick="toggleLanguage()"> <span id="langFlag">🇰🇷</span> <span id="langCode">KO</span> </button> 
+        </header> 
+        <div class="main-content"> <div class="welcome-text"> <h1 id="appTitle">한국 제품을<br>쉽게 찾아보세요</h1> <p id="appSubtitle">검색 방법을 선택하세요</p> </div> <div class="search-options"> <div class="search-option" onclick="showPage('searchResults')"> <div class="option-icon"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /> </svg> </div> <div class="option-info"> <h3 class="option-title" id="searchByName">상품명 검색</h3> <p class="option-desc" id="searchByNameDesc">이름이나 브랜드로 제품 찾기</p> </div> </div> <div class="search-option" onclick="openBarcodeScanner()"> <div class="option-icon"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.5A.75.75 0 0 1 4.5 3.75h15a.75.75 0 0 1 .75.75v15a.75.75 0 0 1-.75.75h-15a.75.75 0 0 1-.75-.75v-15ZM8.25 9v6m3-6v6m3-6v6m3-6v6" /> </svg> </div> <div class="option-info"> <h3 class="option-title" id="scanBarcode">바코드 스캔</h3> <p class="option-desc" id="scanBarcodeDesc">바코드로 정확하게 제품 찾기</p> </div> </div> </div> </div> </main>
+    <div class="page-slide-right" id="searchResults"> 
+        <div class="page-header"> 
+            <button class="back-btn" onclick="goBack()">←</button> 
+            <div class="search-bar-container">
+                <input type="text" class="search-input" id="searchInput" placeholder="상품명을 입력하세요...">
+                <button class="search-submit-btn" id="searchBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                    </svg>
+                </button>
+            </div>
+        </div> 
+        <div class="results-container" id="resultsContainer"></div> 
+    </div>
+    <div class="page-slide-right" id="detail"> 
+        <div class="page-header"> 
+            <button class="back-btn" onclick="goBack()">←</button> 
+            <div class="header-logo" onclick="goToHome()">
+                <img src="logo.jpeg" alt="HANNUN Logo" class="logo-image">
+            </div> 
+        </div> 
+        <div id="detailPageContent"></div> 
+    </div>
+    <div class="scanner-modal" id="scannerModal"> 
+        <div class="barcode-modal-content"> 
+            <div class="barcode-header"> 
+                <h3 class="scan-title" id="barcodeScanTitle">바코드 스캐너</h3> 
+                <button class="close-scan-btn" onclick="closeScanner()">×</button> 
+            </div> 
+            <div class="scanner-container" id="scanner-container"> 
+                <div id="scanner-viewport">
+                    <div class="scan-overlay">
+                        <div class="scan-guide">
+                            <div class="scan-corners">
+                                <div class="corner top-left"></div>
+                                <div class="corner top-right"></div>
+                                <div class="corner bottom-left"></div>
+                                <div class="corner bottom-right"></div>
+                            </div>
+                            <div class="scan-line"></div>
+                        </div>
+                        <div class="scan-instruction" id="scanInstruction">바코드를 화면 중앙에 맞춰주세요</div>
+                    </div>
+                </div>
+                <div class="scan-result" id="scanResult">
+                    <div class="result-icon">✅</div>
+                    <div class="barcode-number" id="barcodeNumber"></div>
+                    <div class="product-found" id="productFound"></div>
+                    <button class="scan-again-btn" id="scanAgainBtn" onclick="restartScanning()">다시 스캔</button>
+                </div>
+            </div> 
+            <div class="manual-input"> 
+                <div class="manual-text" id="manualInputText">또는 바코드 번호 직접 입력</div>
+                <input type="text" class="barcode-input" id="manualBarcode" placeholder="8801234567890">
+                <button class="search-barcode-btn" id="searchBarcodeBtn" onclick="searchByManualBarcode()">검색</button> 
+            </div> 
+        </div> 
+    </div>
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script>
+        // --- API & 설정 ---
+        const FOOD_API_KEY = 'c320de96f22d4183bd13';
+        const FOOD_API_BASE = 'https://openapi.foodsafetykorea.go.kr/api';
+        const SERVICE_ID = 'C005';
+        const TRANSLATE_API_KEY = 'AIzaSyArr1P7f6JuAL8Xz8ECiHi8WkfbNRn4Z7I';
+        const GEMINI_API_KEY = 'AIzaSyDrsbT0bzRyi1WOA3byzJI8VOIY2NpYa6Y';
+        const PROXY_URL = 'https://api.allorigins.win/raw?url=';
+
+        // --- 전역 변수 ---
+        let currentLang = 'ko';
+        let searchCache = null;
+        let pageHistory = ['home'];
+        let isTranslatingCache = false;
+
+        // --- 다국어 텍스트 ---
+        const translations = {
+            ko: { 
+                appTitle: '한국 제품을<br>쉽게 찾아보세요', 
+                appSubtitle: '검색 방법을 선택하세요', 
+                searchByName: '상품명 검색', 
+                searchByNameDesc: '이름이나 브랜드로 제품 찾기', 
+                scanBarcode: '바코드 스캔', 
+                scanBarcodeDesc: '바코드로 정확하게 제품 찾기', 
+                searchPlaceholder: '상품명을 입력하세요...', 
+                productDetail: '상품 상세 정보', 
+                manufacturer: '제조사', 
+                expiry: '소비기한', 
+                barcode: '바코드', 
+                reportNumber: '품목보고번호', 
+                searching: '검색 중...', 
+                noResults: '검색 결과가 없습니다', 
+                loadingInfo: '정보를 불러오는 중...', 
+                errorLoading: '정보를 불러오는 중 오류 발생', 
+                barcodeTitle: '바코드 스캐너', 
+                search: '검색', 
+                product_found: '상품을 찾았습니다!', 
+                product_not_found: '상품을 찾을 수 없습니다.', 
+                camera_error: '카메라를 사용할 수 없습니다.', 
+                invalid_barcode: '유효한 바코드 번호를 입력해주세요.', 
+                translation_needed: '번역을 위해 API 키가 필요합니다.',
+                scanInstruction: '바코드를 화면 중앙에 맞춰주세요',
+                manualInputText: '또는 바코드 번호 직접 입력',
+                scanAgain: '다시 스캔',
+                searching_product: '제품 검색 중...'
+            },
+            en: { 
+                appTitle: 'Find Korean<br>Products Easily', 
+                appSubtitle: 'Choose your search method', 
+                searchByName: 'Search by Name', 
+                searchByNameDesc: 'Find products using their name', 
+                scanBarcode: 'Scan Barcode', 
+                scanBarcodeDesc: 'Find products with their barcode', 
+                searchPlaceholder: 'Enter product name...', 
+                productDetail: 'Product Details', 
+                manufacturer: 'Manufacturer', 
+                expiry: 'Shelf Life', 
+                barcode: 'Barcode', 
+                reportNumber: 'Report No.', 
+                searching: 'Searching...', 
+                noResults: 'No search results found', 
+                loadingInfo: 'Loading information...', 
+                errorLoading: 'Error loading details', 
+                barcodeTitle: 'Barcode Scanner', 
+                search: 'Search', 
+                product_found: 'Product Found!', 
+                product_not_found: 'Product not found.', 
+                camera_error: 'Could not access camera.', 
+                invalid_barcode: 'Please enter a valid barcode.',
+                translation_needed: 'API key is required for translation.',
+                scanInstruction: 'Align barcode to center of screen',
+                manualInputText: 'Or enter barcode number manually',
+                scanAgain: 'Scan Again',
+                searching_product: 'Searching product...'
+            },
+            ja: { 
+                appTitle: '韓国製品を<br>簡単に見つけよう', 
+                appSubtitle: '検索方法を選んでください', 
+                searchByName: '商品名で検索', 
+                searchByNameDesc: '商品名で製品を検索', 
+                scanBarcode: 'バーコードをスキャン', 
+                scanBarcodeDesc: 'バーコードで製品を検索', 
+                searchPlaceholder: '商品名を入力...', 
+                productDetail: '商品詳細', 
+                manufacturer: '製造社', 
+                expiry: '消費期限', 
+                barcode: 'バーコード', 
+                reportNumber: '品目報告番号', 
+                searching: '検索中...', 
+                noResults: '検索結果がありません', 
+                loadingInfo: '情報を読み込み中...', 
+                errorLoading: 'エラーが発生しました', 
+                barcodeTitle: 'バーコードスキャナー', 
+                search: '検索', 
+                product_found: '製品が見つかりました！', 
+                product_not_found: '製品が見つかりません', 
+                camera_error: 'カメラにアクセスできません', 
+                invalid_barcode: '有効なバーコードを入力してください',
+                translation_needed: '翻訳機能にはAPIキーが必要です',
+                scanInstruction: 'バーコードを画面中央に合わせてください',
+                manualInputText: 'またはバーコード番号を直接入力',
+                scanAgain: 'もう一度スキャン',
+                searching_product: '製品検索中...'
+            }
+        };
+        const getText = (key) => translations[currentLang][key] || key;
+
+        // --- 초기화 및 UI 이벤트 ---
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => { document.getElementById('splash').classList.add('fade-out'); }, 1500);
+            fetchAllProducts();
+
+            let searchTimeout;
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+
+            const performSearch = () => {
+                clearTimeout(searchTimeout);
+                const query = searchInput.value.trim();
+                if (query.length > 0) {
+                    searchProducts(query);
+                }
+            };
